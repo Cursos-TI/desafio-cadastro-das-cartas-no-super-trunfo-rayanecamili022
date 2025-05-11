@@ -1,89 +1,156 @@
 #include <stdio.h>
 
+typedef struct {
+    char estado;
+    char codigo[4];
+    char nomeCidade[50];
+    int populacao;
+    float area;
+    float pib; // em bilhões
+    int pontosTuristicos;
+    float densidadePopulacional;
+    double pibPerCapita;
+} Carta;
+
+void calcularDados(Carta *c) {
+    c->densidadePopulacional = (float)c->populacao / c->area;
+    c->pibPerCapita = (double)(c->pib * 1000000000) / c->populacao;
+}
+
+void imprimirCarta(Carta c, int numero) {
+    printf("\n-> Carta %d <-\n", numero);
+    printf("Estado: %c\n", c.estado);
+    printf("Código: %s\n", c.codigo);
+    printf("Nome da Cidade: %s\n", c.nomeCidade);
+    printf("População: %d\n", c.populacao);
+    printf("Área: %.2f km²\n", c.area);
+    printf("PIB: %.2f bilhões de reais\n", c.pib);
+    printf("Número de Pontos Turísticos: %d\n", c.pontosTuristicos);
+    printf("Densidade Populacional: %.2f hab/km²\n", c.densidadePopulacional);
+    printf("PIB per Capita: %.2f reais\n", c.pibPerCapita);
+}
+
+void lerDados(Carta *c, int num) {
+    printf("\nDigite os dados da Carta %d:\n", num);
+
+    printf("Estado (letra): ");
+    scanf(" %c", &c->estado);
+
+    printf("Código (ex: A01): ");
+    scanf("%s", c->codigo);
+
+    printf("Nome da cidade: ");
+    scanf(" %[^\n]", c->nomeCidade); // permite espaços
+
+populacao_novamente:
+    printf("População (número positivo): ");
+    scanf("%d", &c->populacao);
+    if (c->populacao <= 0) {
+        printf("População inválida. Digite novamente.\n");
+        goto populacao_novamente;
+    }
+
+area_novamente:
+    printf("Área (km², maior que zero): ");
+    scanf("%f", &c->area);
+    if (c->area <= 0) {
+        printf("Área inválida. Digite novamente.\n");
+        goto area_novamente;
+    }
+
+pib_novamente:
+    printf("PIB (em bilhões de reais, positivo): ");
+    scanf("%f", &c->pib);
+    if (c->pib <= 0) {
+        printf("PIB inválido. Digite novamente.\n");
+        goto pib_novamente;
+    }
+
+turismo_novamente:
+    printf("Número de pontos turísticos (>= 0): ");
+    scanf("%d", &c->pontosTuristicos);
+    if (c->pontosTuristicos < 0) {
+        printf("Valor inválido. Digite novamente.\n");
+        goto turismo_novamente;
+    }
+}
+
 int main() {
-    // Carta 1 - Brasil
-    char nome1[] = "Brasil";
-    int pop1 = 213000000;     // população
-    int area1 = 8516000;      // km²
-    int pib1 = 1445000;       // em milhões de dólares
-    int dens1 = 25;           // hab/km²
+    Carta carta1, carta2;
+    int pontos1 = 0, pontos2 = 0;
 
-    // Carta 2 - Argentina
-    char nome2[] = "Argentina";
-    int pop2 = 45000000;
-    int area2 = 2780000;
-    int pib2 = 491000;
-    int dens2 = 16;
+    lerDados(&carta1, 1);
+    lerDados(&carta2, 2);
 
-    int op1, op2; // atributos escolhidos
-    int v1_c1, v1_c2, v2_c1, v2_c2;
-    int soma1, soma2;
+    calcularDados(&carta1);
+    calcularDados(&carta2);
 
-    // Menu de atributos
-    printf("Atributos disponíveis:\n");
-    printf("1 - População\n");
-    printf("2 - Área\n");
-    printf("3 - PIB\n");
-    printf("4 - Densidade Demográfica\n");
+    imprimirCarta(carta1, 1);
+    imprimirCarta(carta2, 2);
 
-    // Escolha do primeiro atributo
-    printf("Escolha o primeiro atributo (1 a 4): ");
-    scanf("%d", &op1);
+    printf("\n--> Comparação das Cartas: <--\n");
 
-    // Escolha do segundo atributo
-    printf("Escolha o segundo atributo (diferente do primeiro): ");
-    scanf("%d", &op2);
-
-    // Verificação de validade
-    if (op1 < 1 || op1 > 4 || op2 < 1 || op2 > 4 || op1 == op2) {
-        printf("Erro: atributos inválidos ou repetidos!\n");
-        return 1;
-    }
-
-    // Switch para primeiro atributo
-    switch (op1) {
-        case 1: v1_c1 = pop1; v1_c2 = pop2; break;
-        case 2: v1_c1 = area1; v1_c2 = area2; break;
-        case 3: v1_c1 = pib1; v1_c2 = pib2; break;
-        case 4: v1_c1 = dens1; v1_c2 = dens2; break;
-        default: printf("Erro!\n"); return 1;
-    }
-
-    // Switch para segundo atributo
-    switch (op2) {
-        case 1: v2_c1 = pop1; v2_c2 = pop2; break;
-        case 2: v2_c1 = area1; v2_c2 = area2; break;
-        case 3: v2_c1 = pib1; v2_c2 = pib2; break;
-        case 4: v2_c1 = dens1; v2_c2 = dens2; break;
-        default: printf("Erro!\n"); return 1;
-    }
-
-    // Mostrar dados das cartas
-    printf("\nCarta 1: %s\n", nome1);
-    printf("Atributo %d: %d\n", op1, v1_c1);
-    printf("Atributo %d: %d\n", op2, v2_c1);
-
-    printf("\nCarta 2: %s\n", nome2);
-    printf("Atributo %d: %d\n", op1, v1_c2);
-    printf("Atributo %d: %d\n", op2, v2_c2);
-
-    // Somar os atributos
-    soma1 = v1_c1 + v2_c1;
-    soma2 = v1_c2 + v2_c2;
-
-    // Mostrar somas
-    printf("\nSoma dos atributos:\n");
-    printf("%s: %d\n", nome1, soma1);
-    printf("%s: %d\n", nome2, soma2);
-
-    // Resultado final
-    printf("\nResultado final:\n");
-    if (soma1 > soma2) {
-        printf("Vencedor: %s\n", nome1);
-    } else if (soma2 > soma1) {
-        printf("Vencedor: %s\n", nome2);
+    printf("População: ");
+    if (carta1.populacao > carta2.populacao) {
+        printf("Carta 1 venceu (1)\n");
+        pontos1++;
     } else {
-        printf("Empate!\n");
+        printf("Carta 2 venceu (0)\n");
+        pontos2++;
+    }
+
+    printf("Área: ");
+    if (carta1.area > carta2.area) {
+        printf("Carta 1 venceu (1)\n");
+        pontos1++;
+    } else {
+        printf("Carta 2 venceu (0)\n");
+        pontos2++;
+    }
+
+    printf("PIB: ");
+    if (carta1.pib > carta2.pib) {
+        printf("Carta 1 venceu (1)\n");
+        pontos1++;
+    } else {
+        printf("Carta 2 venceu (0)\n");
+        pontos2++;
+    }
+
+    printf("Pontos Turísticos: ");
+    if (carta1.pontosTuristicos > carta2.pontosTuristicos) {
+        printf("Carta 1 venceu (1)\n");
+        pontos1++;
+    } else {
+        printf("Carta 2 venceu (0)\n");
+        pontos2++;
+    }
+
+    printf("Densidade: ");
+    if (carta1.densidadePopulacional > carta2.densidadePopulacional) {
+        printf("Carta 1 venceu (1)\n");
+        pontos1++;
+    } else {
+        printf("Carta 2 venceu (0)\n");
+        pontos2++;
+    }
+
+    printf("PIB per Capita: ");
+    if (carta1.pibPerCapita > carta2.pibPerCapita) {
+        printf("Carta 1 venceu (1)\n");
+        pontos1++;
+    } else {
+        printf("Carta 2 venceu (0)\n");
+        pontos2++;
+    }
+
+    printf("Super Poder: ");
+    if (pontos1 > pontos2) {
+        printf("Carta 1 foi a grande vencedora!\n");
+    } else if (pontos2 > pontos1) {
+        printf("Carta 2 foi a grande vencedora!\n");
+    } else {
+        printf("Empate entre as cartas!\n");
     }
 
     return 0;
