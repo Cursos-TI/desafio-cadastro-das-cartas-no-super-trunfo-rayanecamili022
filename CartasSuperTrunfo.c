@@ -1,101 +1,101 @@
 #include <stdio.h>
 
+// Função recursiva para movimentação da Torre (horizontal para a Direita)
+void moverTorre(int casas) {
+    if (casas > 0) {
+        printf("Direita\n");
+        moverTorre(casas - 1);
+    }
+}
+
+// Função recursiva para movimentação da Rainha (horizontal para a Esquerda)
+void moverRainha(int casas) {
+    if (casas > 0) {
+        printf("Esquerda\n");
+        moverRainha(casas - 1);
+    }
+}
+
+// Função recursiva com loops aninhados para o Bispo (diagonal Cima-Direita)
+void moverBispo(int casas, int atual) {
+    if (atual < casas) {
+        for (int v = 0; v < 1; v++) { // movimento vertical (1 passo)
+            for (int h = 0; h < 1; h++) { // movimento horizontal (1 passo)
+                printf("Cima - Direita\n");
+            }
+        }
+        moverBispo(casas, atual + 1); // chamada recursiva
+    }
+}
+
+// Função para movimentação do Cavalo (duas para cima e uma para a direita)
+void moverCavalo(int movimentos) {
+    // Cada movimento do cavalo será em "L": duas casas para cima e uma para a direita
+    for (int i = 0; i < movimentos; i++) {
+        for (int cima = 0; cima < 2; cima++) {
+            printf("Cima\n");
+            if (cima == 1) {
+                continue; // prossegue para direita depois de subir 2
+            }
+        }
+
+        for (int direita = 0; direita < 1; direita++) {
+            printf("Direita\n");
+        }
+
+        printf("\n"); // separador visual entre movimentos
+    }
+}
+
 int main() {
-    // Carta 1
-    char estado1;                  // Variável para armazenar o estado da Carta 1
-    char codigo1[10];              // Variável para armazenar o código da Carta 1
-    char nomeCidade1[50];          // Variável para armazenar o nome da cidade da Carta 1
-    int populacao1, pontosTuristicos1; // Variáveis para armazenar a população e o número de pontos turísticos da Carta 1
-    float area1, pib1;             // Variáveis para armazenar a área e o PIB da Carta 1
-    float densidade1, pibPerCapita1; // Variáveis para armazenar a densidade populacional e PIB per capita da Carta 1
+    int opcaoMenu;
+    const int casasTorre = 3;
+    const int casasRainha = 4;
+    const int casasBispo = 2;
+    const int movimentosCavalo = 2;
 
-    // Carta 2
-    char estado2;                  // Variável para armazenar o estado da Carta 2
-    char codigo2[10];              // Variável para armazenar o código da Carta 2
-    char nomeCidade2[50];          // Variável para armazenar o nome da cidade da Carta 2
-    int populacao2, pontosTuristicos2; // Variáveis para armazenar a população e o número de pontos turísticos da Carta 2
-    float area2, pib2;             // Variáveis para armazenar a área e o PIB da Carta 2
-    float densidade2, pibPerCapita2; // Variáveis para armazenar a densidade populacional e PIB per capita da Carta 2
+    do {
+        printf("\n--------------------- \n");
+        printf("|-- MENU DE PECAS --| \n");
+        printf("| 1. Torre          | \n");
+        printf("| 2. Bispo          | \n");
+        printf("| 3. Rainha         | \n");
+        printf("| 4. Cavalo         | \n");
+        printf("| 5. Sair           | \n");
+        printf("--------------------- \n");
+        printf("Escolha uma peca para mover: ");
+        scanf("%d", &opcaoMenu);
 
-    // Entrada dos dados da Carta 1
-    printf("Carta 1:\n");
-    
-    printf("Estado: ");
-    scanf(" %c", &estado1); // Lê um único caractere para o estado (ex: 'SP')
+        switch (opcaoMenu) {
+            case 1:
+                printf("\nTorre: Move-se!\n");
+                moverTorre(casasTorre);
+                break;
 
-    printf("Código: ");
-    scanf("%s", codigo1); // Lê o código da cidade (ex: 'SP01')
+            case 2:
+                printf("\nBispo: Move-se!\n");
+                moverBispo(casasBispo, 0);
+                break;
 
-    printf("Nome da Cidade: ");
-    scanf(" %[^\n]", nomeCidade1); // Lê o nome da cidade, permitindo espaços (ex: 'São Paulo')
+            case 3:
+                printf("\nRainha: Move-se!\n");
+                moverRainha(casasRainha);
+                break;
 
-    printf("População: ");
-    scanf("%d", &populacao1); // Lê o valor da população
+            case 4:
+                printf("\nCavalo: Move-se!\n");
+                moverCavalo(movimentosCavalo);
+                break;
 
-    printf("Área (em km²): ");
-    scanf("%f", &area1); // Lê o valor da área
+            case 5:
+                printf("\nObrigado por jogar!\nSaindo...\n");
+                break;
 
-    printf("PIB (em bilhões de reais): ");
-    scanf("%f", &pib1); // Lê o valor do PIB em bilhões
+            default:
+                printf("Opcao invalida!\n");
+        }
 
-    printf("Número de Pontos Turísticos: ");
-    scanf("%d", &pontosTuristicos1); // Lê o número de pontos turísticos
+    } while (opcaoMenu != 5);
 
-    // Cálculos da Carta 1
-    densidade1 = populacao1 / area1; // Calcula a densidade populacional (população / área)
-    pibPerCapita1 = (pib1 * 1000000000) / populacao1; // Calcula o PIB per capita (PIB em reais / população)
-
-    // Entrada dos dados da Carta 2
-    printf("\nCarta 2:\n");
-
-    printf("Estado: ");
-    scanf(" %c", &estado2); // Lê o estado da Carta 2
-
-    printf("Código: ");
-    scanf("%s", codigo2); // Lê o código da cidade da Carta 2
-
-    printf("Nome da Cidade: ");
-    scanf(" %[^\n]", nomeCidade2); // Lê o nome da cidade da Carta 2
-
-    printf("População: ");
-    scanf("%d", &populacao2); // Lê o valor da população da Carta 2
-
-    printf("Área (em km²): ");
-    scanf("%f", &area2); // Lê o valor da área da Carta 2
-
-    printf("PIB (em bilhões de reais): ");
-    scanf("%f", &pib2); // Lê o valor do PIB da Carta 2
-
-    printf("Número de Pontos Turísticos: ");
-    scanf("%d", &pontosTuristicos2); // Lê o número de pontos turísticos da Carta 2
-
-    // Cálculos da Carta 2
-    densidade2 = populacao2 / area2; // Calcula a densidade populacional da Carta 2
-    pibPerCapita2 = (pib2 * 1000000000) / populacao2; // Calcula o PIB per capita da Carta 2
-
-    // Saída formatada da Carta 1
-    printf("\nCarta 1:\n");
-    printf("Estado: %c\n", estado1); // Exibe o estado da Carta 1
-    printf("Código: %s\n", codigo1); // Exibe o código da Carta 1
-    printf("Nome da Cidade: %s\n", nomeCidade1); // Exibe o nome da cidade da Carta 1
-    printf("População: %d\n", populacao1); // Exibe a população da Carta 1
-    printf("Área: %.2f km²\n", area1); // Exibe a área da Carta 1 com 2 casas decimais
-    printf("PIB: %.2f bilhões de reais\n", pib1); // Exibe o PIB da Carta 1 com 2 casas decimais
-    printf("Número de Pontos Turísticos: %d\n", pontosTuristicos1); // Exibe o número de pontos turísticos da Carta 1
-    printf("Densidade Populacional: %.2f hab/km²\n", densidade1); // Exibe a densidade populacional da Carta 1 com 2 casas decimais
-    printf("PIB per Capita: %.2f reais\n", pibPerCapita1); // Exibe o PIB per capita da Carta 1 com 2 casas decimais
-
-    // Saída formatada da Carta 2
-    printf("\nCarta 2:\n");
-    printf("Estado: %c\n", estado2); // Exibe o estado da Carta 2
-    printf("Código: %s\n", codigo2); // Exibe o código da Carta 2
-    printf("Nome da Cidade: %s\n", nomeCidade2); // Exibe o nome da cidade da Carta 2
-    printf("População: %d\n", populacao2); // Exibe a população da Carta 2
-    printf("Área: %.2f km²\n", area2); // Exibe a área da Carta 2 com 2 casas decimais
-    printf("PIB: %.2f bilhões de reais\n", pib2); // Exibe o PIB da Carta 2 com 2 casas decimais
-    printf("Número de Pontos Turísticos: %d\n", pontosTuristicos2); // Exibe o número de pontos turísticos da Carta 2
-    printf("Densidade Populacional: %.2f hab/km²\n", densidade2); // Exibe a densidade populacional da Carta 2 com 2 casas decimais
-    printf("PIB per Capita: %.2f reais\n", pibPerCapita2); // Exibe o PIB per capita da Carta 2 com 2 casas decimais
-
-    return 0; // Finaliza o programa
+    return 0;
 }
